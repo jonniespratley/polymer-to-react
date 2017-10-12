@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>my-simple-polymer-component</title>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.14/webcomponents-lite.js"></script>
+		<base href="http://polygit.org/polymer+v1.6.0/components/">
+
+		<link href="polymer/polymer.html" rel="import" />
+
+	</head>
+
+	<body>
+
+		<dom-module id="my-simple-polymer-component">
+		  <template>
+		    <style>
+		      :host {
+		        display: block;
+		      }
+		      span {
+		        color: blue;
+		      }
+		    </style>
+		    <div>
+		      <div>Hello <span>{{name}}</span></div>
+		      <content></content>
+		      <ul>
+		        <template is="dom-repeat" items="[[items]]">
+		          <li>{{item}}</li>
+		        </template>
+		      </ul>
+		    </div>
+		  </template>
+		  <script>
+		    document.addEventListener('WebComponentsReady', function() {
+		      Polymer({
+		        is: 'my-simple-polymer-component',
+		        properties: {
+		          name: {
+		            type: String,
+		            notify: true
+		          },
+		          items: {
+		            type: Array
+		          }
+		        },
+		        created: function() {
+		          console.log(this.tagName, 'created', this);
+		        },
+		        ready: function() {
+		          console.log(this.tagName, 'ready', this);
+		        },
+		        attached: function() {
+		          console.log(this.tagName, 'attached', this);
+		        },
+		        detached: function() {
+		          console.log(this.tagName, 'detached', this);
+		        }
+		      });
+		    });
+		  </script>
+		</dom-module>
+
+		<template id="app" is="dom-bind">
+			<my-simple-polymer-component name="[[name]]" items="[[items]]">
+				This is content.
+			</my-simple-polymer-component>
+		</template>
+		<script type="text/javascript">
+			document.addEventListener('WebComponentsReady', function() {
+				var scope = document.querySelector('#app');
+				scope.name = 'Jonnie';
+				scope.items = [1,2,3,4,5];
+			});
+		</script>
+
+	</body>
+
+</html>

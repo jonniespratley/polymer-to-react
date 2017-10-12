@@ -4,8 +4,12 @@
   "description": "A guide to transition from Polymer to React.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve ."
   },
   "author": "Jonnie Spratley",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "serve": "^6.2.0"
+  }
 }
