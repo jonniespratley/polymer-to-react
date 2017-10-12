@@ -1,0 +1,11 @@
+{
+  "name": "polymer-to-react",
+  "version": "1.0.0",
+  "description": "A guide to transition from Polymer to React.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonnie Spratley",
+  "license": "ISC"
+}
