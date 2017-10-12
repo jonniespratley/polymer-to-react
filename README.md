@@ -117,6 +117,7 @@ class MySimpleReactComponent extends React.Component {
 
 ## Component Helpers
 When using Polymer one will become familar with using elements like `dom-repeat`, `dom-if`, etc.
+
 So how does that translate into React? Well is quite simple, since eveything in React is JavaScript you can simply use JavaScript in your JSX templates.
 
 
@@ -124,19 +125,25 @@ So how does that translate into React? Well is quite simple, since eveything in 
 
 
 In polymer you use the `dom-repeat` element.
+
 ```html
 <ul>
   <template is="dom-repeat" items="[[items]]">
-    <li>{{$index}} - {{item}}</li>
+    <li>{{index}} - {{item}}</li>
   </template>
 </ul>
 ```
 
-In react you use the `map` function on an array.
+In react you use the `map` method on an array.
+
 ```js
-<ul>
-  {items && items.map((item, index) => (<li key={index}>{item}</li>))}
-</ul>
+const list = (items) => (
+  <ul>
+    {items.length > 0 && items.map((item, index) => (
+      <li key={index}>{item}</li>
+    ))}
+  </ul>
+);
 ```
 
 
@@ -149,6 +156,16 @@ In react you use the `map` function on an array.
 ```
 
 ```js
-//
 {name && <span>{name}</span>}
+```
+
+### `template` => JSX
+Fundamentally, JSX just provides syntactic sugar for the `React.createElement()` function.
+
+
+You can pass any JavaScript expression as a prop, by surrounding it with {}
+
+```js
+<App name={'Test'}/>
+<App name='Test'/>
 ```
