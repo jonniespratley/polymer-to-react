@@ -3,49 +3,104 @@
 
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>my-simple-polymer-component</title>
-
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.14/webcomponents-lite.js"></script>
 		<base href="http://polygit.org/polymer+v1.6.0/components/">
 
 		<link href="polymer/polymer.html" rel="import" />
-
+		<style media="screen">
+			body{
+				padding-top: 40px;
+			}
+		</style>
 	</head>
-
 	<body>
 
-		<dom-module id="my-simple-polymer-component">
+		<!-- Define Web Component - Can be in external .html file -->
+		<dom-module id="my-todo-polymer-component">
 		  <template>
+				<!-- Scoped style -->
 		    <style>
 		      :host {
 		        display: block;
 		      }
-		      span {
+		      :host span {
 		        color: blue;
 		      }
+					:host ul{
+						margin: 0;
+						padding: 0;
+						user-select: none;
+					}
+					:host .close{
+						color: red;
+					}
 		    </style>
-		    <div>
-		      <div>Hello <span>{{name}}</span></div>
-		      <content></content>
-		      <ul>
-		        <template is="dom-repeat" items="[[items]]">
-		          <li>{{item}}</li>
-		        </template>
-		      </ul>
+
+				<!-- Component template -->
+		    <div class="my-todo-polymer-component">
+						<header class="text-center mb-4">
+							<h2>todos</h2>
+						</header>
+
+						<!-- todo form -->
+						<section>
+							<form id="todoForm" method="post" on-submit="_handleSubmit">
+		 						<div class="form-group">
+		 							<input
+		 								class="form-control form-control-lg"
+		 								type="text"
+		 								name="todo"
+		 								placeholder="What needs to be done?"/>
+		 						</div>
+		 					</form>
+
+							<!-- todo list -->
+		 		      <ul class="list-group-flush">
+		 		        <template is="dom-repeat" items="{{items}}" as="item" filter="{{_filterItems(filter)}}">
+		 		          <li class="list-group-item">
+										<input type="checkbox" checked="[[item.completed]]" on-change="_updateItem"/>
+										{{item.text}}
+										<button type="button" class="close" on-tap="_removeItem">&times;</button>
+									</li>
+		 		        </template>
+		 		      </ul>
+						</section>
+
+						<!-- todo filter -->
+						<footer class="d-flex justify-content-center mt-4">
+							<a href="#all" class="btn btn-sm" on-tap="_handleFilter">All</a>
+							<a href="#active" class="btn btn-sm" on-tap="_handleFilter">Active</a>
+							<a href="#completed" class="btn btn-sm" on-tap="_handleFilter">Completed</a>
+						</footer>
+
+						<!-- Inject children -->
+						<content></content>
 		    </div>
 		  </template>
+
 		  <script>
+				// Component definition
 		    document.addEventListener('WebComponentsReady', function() {
 		      Polymer({
-		        is: 'my-simple-polymer-component',
+		        is: 'my-todo-polymer-component',
 		        properties: {
 		          name: {
 		            type: String,
 		            notify: true
 		          },
+							selectedItem: {
+								type: Object,
+								notify: true
+							},
 		          items: {
 		            type: Array
-		          }
+		          },
+							filter: {
+								type: String
+							}
 		        },
 		        created: function() {
 		          console.log(this.tagName, 'created', this);
@@ -58,22 +113,61 @@
 		        },
 		        detached: function() {
 		          console.log(this.tagName, 'detached', this);
-		        }
+		        },
+						_handleSubmit: function(e){
+							e.preventDefault();
+							var val = e.currentTarget.querySelector('[name="todo"]').value;
+							if(!val){
+								return;
+							}
+							this.push('items', { text: val });
+							this.$.todoForm.reset();
+						},
+						_updateItem: function(e){
+							this.set('items.' + e.model.index + '.completed', !e.model.item.completed);
+						},
+						_removeItem: function(e){
+							this.splice('items', e.model.index, 1);
+						},
+						_handleFilter: function(e){
+							e.preventDefault();
+							this.set('filter', e.target.hash.replace('#', ''));
+						},
+						_filterItems: function(filter){
+							return function(item){
+								switch (filter) {
+									case 'completed':
+										return item.completed;
+									break;
+									case 'active':
+										return !item.completed;
+									break;
+									default:
+										return item;
+									break;
+								}
+							}
+						}
 		      });
 		    });
 		  </script>
 		</dom-module>
 
+		<!-- Usage -->
 		<template id="app" is="dom-bind">
-			<my-simple-polymer-component name="[[name]]" items="[[items]]">
-				This is content.
-			</my-simple-polymer-component>
+			<div class="container">
+				<my-todo-polymer-component name="[[name]]" items="{{todos}}">
+				</my-todo-polymer-component>
+			</div>
 		</template>
+
 		<script type="text/javascript">
 			document.addEventListener('WebComponentsReady', function() {
 				var scope = document.querySelector('#app');
 				scope.name = 'Jonnie';
-				scope.items = [1,2,3,4,5];
+				scope.todos = [
+					{text: 'Learn ReactJS'}
+				];
 			});
 		</script>
 

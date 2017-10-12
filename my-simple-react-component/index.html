@@ -3,6 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>my-simple-react-component</title>
 
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js'></script>
@@ -38,8 +39,13 @@
 			    const {children, name} = this.props;
 				  return (
 					  <div className='MySimpleReactComponent'>
-			        <div>Hello <span>{name}</span></div>
-			        {children}
+			        <header>
+								Welcome <span>{name}</span>
+							</header>
+
+							{children}
+
+
 							<style>{`
 								.MySimpleReactComponent {
 									display: block;

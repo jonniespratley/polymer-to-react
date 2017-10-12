@@ -28,12 +28,14 @@ The following is a bare bones Polymer web component.
       :host {
         display: block;
       }
-      span {
+      :host .my-simple-polymer-component span {
         color: blue;
       }
     </style>
-    <div>
-      <div>Hello <span>{{name}}</span></div>
+    <div class="my-simple-polymer-component">
+      <header>
+        Welcome <span>{{name}}</span>
+      </header>
       <content></content>
       <ul>
         <template is="dom-repeat" items="[[items]]">
