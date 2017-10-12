@@ -6,170 +6,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>my-simple-polymer-component</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" />
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.14/webcomponents-lite.js"></script>
-		<base href="http://polygit.org/polymer+v1.6.0/components/">
 
-		<link href="polymer/polymer.html" rel="import" />
+
+
 		<style media="screen">
-			body{
-				padding-top: 40px;
-			}
+					}
 		</style>
 	</head>
 	<body>
 
-		<!-- Define Web Component - Can be in external .html file -->
-		<dom-module id="my-todo-polymer-component">
-		  <template>
-				<!-- Scoped style -->
-		    <style>
-		      :host {
-		        display: block;
-		      }
-		      :host span {
-		        color: blue;
-		      }
-					:host ul{
-						margin: 0;
-						padding: 0;
-						user-select: none;
-					}
-					:host .close{
-						color: red;
-					}
-		    </style>
+		<div class="container-fluid">
+			<iframe height='550'
+				scrolling='no'
+				title='my-todo-polymer-component'
+				src='//codepen.io/jonniespratley/embed/veaPmo/?height=550&theme-id=dark&default-tab=js,result&embed-version=2&editable=true'
+				frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/jonniespratley/pen/veaPmo/'>my-todo-polymer-component</a> by Jonnie Spratley (<a href='https://codepen.io/jonniespratley'>@jonniespratley</a>) on <a href='https://codepen.io'>CodePen</a>.
+			</iframe>
 
-				<!-- Component template -->
-		    <div class="my-todo-polymer-component">
-						<header class="text-center mb-4">
-							<h2>todos</h2>
-						</header>
-
-						<!-- todo form -->
-						<section>
-							<form id="todoForm" method="post" on-submit="_handleSubmit">
-		 						<div class="form-group">
-		 							<input
-		 								class="form-control form-control-lg"
-		 								type="text"
-		 								name="todo"
-		 								placeholder="What needs to be done?"/>
-		 						</div>
-		 					</form>
-
-							<!-- todo list -->
-		 		      <ul class="list-group-flush">
-		 		        <template is="dom-repeat" items="{{items}}" as="item" filter="{{_filterItems(filter)}}">
-		 		          <li class="list-group-item">
-										<input type="checkbox" checked="[[item.completed]]" on-change="_updateItem"/>
-										{{item.text}}
-										<button type="button" class="close" on-tap="_removeItem">&times;</button>
-									</li>
-		 		        </template>
-		 		      </ul>
-						</section>
-
-						<!-- todo filter -->
-						<footer class="d-flex justify-content-center mt-4">
-							<a href="#all" class="btn btn-sm" on-tap="_handleFilter">All</a>
-							<a href="#active" class="btn btn-sm" on-tap="_handleFilter">Active</a>
-							<a href="#completed" class="btn btn-sm" on-tap="_handleFilter">Completed</a>
-						</footer>
-
-						<!-- Inject children -->
-						<content></content>
-		    </div>
-		  </template>
-
-		  <script>
-				// Component definition
-		    document.addEventListener('WebComponentsReady', function() {
-		      Polymer({
-		        is: 'my-todo-polymer-component',
-		        properties: {
-		          name: {
-		            type: String,
-		            notify: true
-		          },
-							selectedItem: {
-								type: Object,
-								notify: true
-							},
-		          items: {
-		            type: Array
-		          },
-							filter: {
-								type: String
-							}
-		        },
-		        created: function() {
-		          console.log(this.tagName, 'created', this);
-		        },
-		        ready: function() {
-		          console.log(this.tagName, 'ready', this);
-		        },
-		        attached: function() {
-		          console.log(this.tagName, 'attached', this);
-		        },
-		        detached: function() {
-		          console.log(this.tagName, 'detached', this);
-		        },
-						_handleSubmit: function(e){
-							e.preventDefault();
-							var val = e.currentTarget.querySelector('[name="todo"]').value;
-							if(!val){
-								return;
-							}
-							this.push('items', { text: val });
-							this.$.todoForm.reset();
-						},
-						_updateItem: function(e){
-							this.set('items.' + e.model.index + '.completed', !e.model.item.completed);
-						},
-						_removeItem: function(e){
-							this.splice('items', e.model.index, 1);
-						},
-						_handleFilter: function(e){
-							e.preventDefault();
-							this.set('filter', e.target.hash.replace('#', ''));
-						},
-						_filterItems: function(filter){
-							return function(item){
-								switch (filter) {
-									case 'completed':
-										return item.completed;
-									break;
-									case 'active':
-										return !item.completed;
-									break;
-									default:
-										return item;
-									break;
-								}
-							}
-						}
-		      });
-		    });
-		  </script>
-		</dom-module>
-
-		<!-- Usage -->
-		<template id="app" is="dom-bind">
-			<div class="container">
-				<my-todo-polymer-component name="[[name]]" items="{{todos}}">
-				</my-todo-polymer-component>
-			</div>
-		</template>
-
-		<script type="text/javascript">
-			document.addEventListener('WebComponentsReady', function() {
-				var scope = document.querySelector('#app');
-				scope.name = 'Jonnie';
-				scope.todos = [
-					{text: 'Learn ReactJS'}
-				];
-			});
-		</script>
+		</div>
 
 	</body>
 
