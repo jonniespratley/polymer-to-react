@@ -1,0 +1,126 @@
+<!-- import polymer-element -->
+<link rel="import" href="https://polygit.org/components/polymer/polymer-element.html">
+
+<!-- import template repeater -->
+<link rel="import" href="https://polygit.org/components/polymer/lib/elements/dom-repeat.html">
+
+
+<dom-module id="my-todo-component">
+	<link rel="import" type="css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+	<template>
+
+		<!-- Scoped style -->
+		<style>
+			:host {
+				display: block;
+				max-width: 400px;
+				margin: auto;
+			}
+			:host ul{
+				margin: 0;
+				padding: 0;
+				user-select: none;
+			}
+			:host .close{
+				color: red;
+			}
+		</style>
+
+		<header class="text-center mb-4">
+			<h2>todos</h2>
+		</header>
+
+		<!-- todo form -->
+		<section>
+			<form id="todoForm" method="post" on-submit="_handleSubmit">
+				<div class="form-group">
+					<input name="todo"
+								 type="text"
+								 class="form-control form-control-lg"
+								 placeholder="What needs to be done?"/>
+				</div>
+			</form>
+
+			<!-- todo list -->
+			<ul class="list-group-flush">
+				<template is="dom-repeat" items="{{items}}" as="item" filter="{{_filterItems(filter)}}">
+					<li class="list-group-item">
+						<input type="checkbox" checked="[[item.completed]]" on-change="_updateItem"/>
+						{{item.text}}
+						<button type="button" class="close" on-click="_removeItem">&times;</button>
+					</li>
+				</template>
+			</ul>
+		</section>
+
+		<!-- todo filter -->
+		<footer class="d-flex justify-content-center mt-4">
+			<a href="#all" class="btn btn-sm" on-click="_handleFilter">All</a>
+			<a href="#active" class="btn btn-sm" on-click="_handleFilter">Active</a>
+			<a href="#completed" class="btn btn-sm" on-click="_handleFilter">Completed</a>
+		</footer>
+
+	</template>
+	<script>
+		class MyTodoComponent extends Polymer.Element {
+			static get is() {
+				return 'my-todo-component';
+			}
+			static get properties() {
+				return {
+					items: Array,
+					filter: String
+				}
+			}
+			// set this element's employees property
+			constructor() {
+				super();
+				console.log(this.tagName, 'created', this);
+			}
+			connectedCallback() {
+				console.log(this.tagName, 'connectedCallback', this);
+			}
+			disconnectedCallback() {
+				console.log(this.tagName, 'disconnectedCallback', this);
+			}
+			_handleSubmit(e) {
+				e.preventDefault();
+				var val = e.currentTarget.querySelector('[name="todo"]').value;
+				if (!val) {
+					return;
+				}
+				this.push('items', {
+					text: val
+				});
+				e.currentTarget.reset();
+			}
+			_updateItem(e) {
+				this.set('items.' + e.model.index + '.completed', !e.model.item.completed);
+			}
+			_removeItem(e) {
+				this.splice('items', e.model.index, 1);
+			}
+			_handleFilter(e) {
+				e.preventDefault();
+				this.set('filter', e.target.hash.replace('#', ''));
+			}
+			_filterItems(filter) {
+				return function(item) {
+					switch (filter) {
+						case 'completed':
+							return item.completed;
+							break;
+						case 'active':
+							return !item.completed;
+							break;
+						default:
+							return item;
+							break;
+					}
+				};
+			}
+		}
+		customElements.define(MyTodoComponent.is, MyTodoComponent);
+	</script>
+
+</dom-module>

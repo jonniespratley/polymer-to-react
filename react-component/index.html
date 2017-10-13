@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>my-simple-react-component</title>
+
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js'></script>
+
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	</head>
+
+	<body>
+		<div id="root">
+			<!-- App loaded here -->
+		</div>
+
+		<script type="text/babel">
+
+    	const { Component } = React;
+
+			
+			const mountNode = document.querySelector('#root');
+			const { render } = ReactDOM;
+
+			function App(){
+				return (<MySimpleReactComponent name='Jonnie'>This is content</MySimpleReactComponent>);
+			}
+
+			render(<App/>, mountNode);
+		</script>
+	</body>
+</html>

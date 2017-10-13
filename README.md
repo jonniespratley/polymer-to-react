@@ -17,7 +17,7 @@ $ polymer init
 Here is how some of the component lifecycle methods look.
 
 
-### Example Polymer Component
+### Example Polymer 1.6.x Component
 The following is a bare bones Polymer web component.
 
 ```html
@@ -75,7 +75,7 @@ The following is a bare bones Polymer web component.
 </dom-module>
 ```
 
-### Example React Component
+### Example React 0.16.x Component
 The following is a bare bones React component.
 
 ```js
@@ -116,6 +116,32 @@ class MySimpleReactComponent extends React.Component {
 ```
 
 
+
+### Example Polymer 2.0 Component
+
+
+```html
+<link rel="import"  href="https://polygit.org/components/polymer/polymer-element.html">
+
+<script>
+  class CustomElement extends Polymer.Element {
+    static get is() { return "custom-element"; }
+    constructor() {
+        super();
+        this.textContent = "I'm a custom-element.";
+      }
+  }
+
+  // Register the new element with the browser
+  customElements.define(CustomElement.is, CustomElement);
+</script>
+```
+
+
+
+
+
+---
 
 ## Component Helpers
 When using Polymer one will become familar with using elements like `dom-repeat`, `dom-if`, etc.
