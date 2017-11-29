@@ -1,14 +1,23 @@
 # Polymer to React
-This document should aid in the transition from Polymer 1.x to React 0.16.x.
+This document should aid in the transition from Polymer 1.x to P/React 0.16.x.
 
 
 ## Getting Started
 If you were to wanting to get started creating a new component or app.
 
 
+### Polymer
+
 ```
 $ npm i -g polymer-cli
 $ polymer init
+```
+
+### P/React
+
+```
+$ npm i -g create-react-app
+$ create-react-app my-app
 ```
 
 
@@ -34,12 +43,12 @@ The following is a bare bones Polymer web component.
     </style>
     <div class="my-simple-polymer-component">
       <header>
-        Welcome <span>{{name}}</span>
+        Hello <span>{{name}}</span>
       </header>
       <content></content>
       <ul>
         <template is="dom-repeat" items="[[items]]">
-          <li>{{$index}} - {{item}}</li>
+          <li on-click="handleClick">{{$index}} - {{item}}</li>
         </template>
       </ul>
     </div>
@@ -68,6 +77,9 @@ The following is a bare bones Polymer web component.
         },
         detached: function() {
           console.log(this.tagName, 'detached', this);
+        },
+        handleClick: function(e) {
+          console.log(this.tagName, 'click', this);
         }
       });
     });
@@ -75,7 +87,7 @@ The following is a bare bones Polymer web component.
 </dom-module>
 ```
 
-### Example React 0.16.x Component
+### Example P/React 0.16.x Component
 The following is a bare bones React component.
 
 ```js
@@ -85,6 +97,7 @@ class MySimpleReactComponent extends React.Component {
   constructor(props){
     super(props);
     this.displayName = 'MySimpleReactComponent';
+		this.handleClick = this.handleClick.bind(this);
   }
   componentWillMount(){
     console.log(this.displayName, 'componentWillMount', this);
@@ -95,15 +108,27 @@ class MySimpleReactComponent extends React.Component {
   componentWillUnmount(){
     console.log(this.displayName, 'componentWillUnmount', this);
   }
+	handleClick(e){
+    console.log(this.displayName, 'click', this);
+  }
   render(){
-    const {children, name} = this.props;
+    const {children, name, items} = this.props;
     return (
       <div className='MySimpleReactComponent'>
-        <div>Hello <span>{name}</span></div>
+        <header>
+          Hello <span>{name}</span>
+        </header>
         {children}
+        <ul>
+          {items && items.map((item, index) => (
+             <li onClick={this.handleClick}>{index} - {item}</li>
+          ))}
+        </ul>
         <style>{`
           .MySimpleReactComponent {
             display: block;
+            padding: 1rem;
+						background: white;
           }
           .MySimpleReactComponent span{
             color: blue;
@@ -116,25 +141,12 @@ class MySimpleReactComponent extends React.Component {
 ```
 
 
+#### Usage
 
-### Example Polymer 2.0 Component
-
-
-```html
-<link rel="import"  href="https://polygit.org/components/polymer/polymer-element.html">
-
-<script>
-  class CustomElement extends Polymer.Element {
-    static get is() { return "custom-element"; }
-    constructor() {
-        super();
-        this.textContent = "I'm a custom-element.";
-      }
-  }
-
-  // Register the new element with the browser
-  customElements.define(CustomElement.is, CustomElement);
-</script>
+```js
+<MySimpleReactComponent 
+	name='Jonnie'
+	items={['Item 1', 'Item 2', 'Item 3']}/>
 ```
 
 
@@ -144,7 +156,7 @@ class MySimpleReactComponent extends React.Component {
 ---
 
 ## Component Helpers
-When using Polymer one will become familar with using elements like `dom-repeat`, `dom-if`, etc.
+When using Polymer one will become familiar with using elements like `dom-repeat`, `dom-if`, `content`, etc.
 
 So how does that translate into React? Well is quite simple, since eveything in React is JavaScript you can simply use JavaScript in your JSX templates.
 
@@ -176,6 +188,7 @@ const list = (items) => (
 
 
 ### `dom-if` => `boolean`
+The `dom-if` element is a boolean which will render if value is true.
 
 ```html
 <template is="dom-if" if="[[name]]">
@@ -183,6 +196,7 @@ const list = (items) => (
 </template>
 ```
 
+In react since everything is JavaScript you can just use the `&&` operator.
 ```js
 {name && <span>{name}</span>}
 ```
@@ -197,3 +211,25 @@ You can pass any JavaScript expression as a prop, by surrounding it with {}
 <App name={'Test'}/>
 <App name='Test'/>
 ```
+
+### `content` => `children`
+In polymer you would use the `content` element where you want children elements to be injected.
+
+```html
+<div>
+  <content></content>
+</div>
+```
+In react you use the `children` property that contains the child components to inject.
+
+```js
+<div>
+  {this.props.children}
+</div>
+```
+
+
+## Resources
+
+- React Documentation - https://reactjs.org/docs/react-component.html
+- Preact Documentation - https://preactjs.com/guide/api-reference
